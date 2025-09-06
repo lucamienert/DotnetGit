@@ -22,6 +22,7 @@ if (repoPath != null)
     commands.Add(new StatusCommand(repoPath));
     commands.Add(new BranchCommand(repoPath));
     commands.Add(new CheckoutCommand(repoPath));
+    commands.Add(new MergeCommand(repoPath));
 }
 
 var cmdName = args[0].ToLower();
