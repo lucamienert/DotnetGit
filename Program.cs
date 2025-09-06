@@ -1,23 +1,52 @@
 ﻿using DotnetGit.Commands;
 
-var commands = new Dictionary<string, ICommand>
-{
-    { "init", new InitCommand() },
-};
-
 if (args.Length == 0)
 {
-    Console.WriteLine("Usage: dotnetgit <command> [options]");
+    ShowUsage();
+
     return;
 }
 
-var cmd = args[0];
+var commands = new List<ICommand>
+{
+    new InitCommand(),
+    new AddCommand(FindRepoPath(Environment.CurrentDirectory) ?? ""),
+};
 
-if (commands.TryGetValue(cmd, out var command))
+var cmdName = args[0].ToLower();
+var command = commands.Find(c => c.Name == cmdName);
+
+if (command == null)
 {
-    command.Execute(args);
+    Console.WriteLine($"Unknown command: {cmdName}");
+    ShowUsage();
+
+    return;
 }
-else
+
+var commandArgs = args.Length > 1 ? args[1..] : Array.Empty<string>();
+command.Execute(commandArgs);
+
+void ShowUsage()
 {
-    Console.WriteLine($"Unknown command: {cmd}");
+    Console.WriteLine("Usage: dotnetgit <command> [options]");
+    Console.WriteLine("Commands:");
+    Console.WriteLine("  init                Initialize repository");
+    Console.WriteLine("  add <file>          Stage file for commit");
+    Console.WriteLine("  commit <message>    Commit staged files");
+}
+
+string? FindRepoPath(string startDir)
+{
+    var dir = startDir;
+
+    while (dir != null)
+    {
+        if (Directory.Exists(Path.Combine(dir, ".dotnetgit")))
+            return dir;
+
+        dir = Directory.GetParent(dir)?.FullName;
+    }
+
+    return null;
 }

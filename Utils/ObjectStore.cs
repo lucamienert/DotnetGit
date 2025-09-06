@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DotnetGit.Utils;
 
-public class ObjectStore(string repoPath)
+public class ObjectStore(string? repoPath)
 {
     private readonly string objectsPath = Path.Combine(repoPath, ".dotnetgit", "Objects");
 

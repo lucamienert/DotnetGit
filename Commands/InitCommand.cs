@@ -4,6 +4,8 @@ namespace DotnetGit.Commands;
 
 public class InitCommand : ICommand
 {
+    public string Name => "init";
+
     private readonly FileUtils fileUtils = new FileUtils();
 
     public void Execute(string[] args)
