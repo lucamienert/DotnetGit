@@ -21,7 +21,7 @@ public class InitCommand : ICommand
 
         fileUtils.CreateFolder(myGitPath);
 
-        fileUtils.CreateFolder(Path.Combine(myGitPath, "objects"));
+        fileUtils.CreateFolder(Path.Combine(myGitPath, "Objects"));
         fileUtils.CreateFolder(Path.Combine(myGitPath, "refs"));
         fileUtils.CreateFolder(Path.Combine(myGitPath, "refs", "heads"));
 

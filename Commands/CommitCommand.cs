@@ -24,7 +24,7 @@ public class CommitCommand(string repoPath) : ICommand
 
         var message = args[0];
 
-        if (!File.Exists(indexPath))
+        if (!File.Exists(indexPath) || new FileInfo(indexPath).Length == 0)
         {
             Console.WriteLine("Nothing to commit. The index is empty.");
             return;
@@ -38,12 +38,27 @@ public class CommitCommand(string repoPath) : ICommand
             treeBuilder.AppendLine(line);
         }
 
-        var commitContent = $"tree:\n{treeBuilder}\nmessage: {message}\n";
-        var commitHash = objectStore.WriteBlob(CreateTempFile(commitContent));
+        var parentHash = "";
 
-        Console.WriteLine($"[master {commitHash.Substring(0, 7)}] {message}");
+        if (File.Exists(refsHeadsPath))
+        {
+            parentHash = File.ReadAllText(refsHeadsPath).Trim();
+        }
+
+        var commitBuilder = new StringBuilder();
+        commitBuilder.AppendLine("tree:");
+        commitBuilder.Append(treeBuilder);
+
+        if (!string.IsNullOrEmpty(parentHash))
+            commitBuilder.AppendLine($"parent: {parentHash}");
+
+        commitBuilder.AppendLine($"message: {message}");
+
+        var commitHash = objectStore.WriteBlob(CreateTempFile(commitBuilder.ToString()));
 
         File.WriteAllText(refsHeadsPath, commitHash);
+
+        Console.WriteLine($"[master {commitHash.Substring(0, 7)}] {message}");
 
         File.WriteAllText(indexPath, string.Empty);
     }
