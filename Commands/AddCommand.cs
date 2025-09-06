@@ -18,21 +18,22 @@ public class AddCommand(string repoPath) : ICommand
             return;
         }
 
-        foreach (var filePath in args)
+        foreach (var path in args)
         {
-            var fullPath = Path.Combine(repoPath, filePath);
+            var fullPath = Path.Combine(repoPath, path);
 
-            if (!File.Exists(fullPath))
+            if (File.Exists(fullPath))
             {
-                Console.WriteLine($"File not found: {filePath}");
-                continue;
+                AddFile(fullPath, path);
             }
-
-            var blobHash = objectStore.WriteBlob(fullPath);
-
-            StageFile(filePath, blobHash);
-
-            Console.WriteLine($"Added {filePath} ({blobHash})");
+            else if (Directory.Exists(fullPath))
+            {
+                AddDirectory(fullPath, path);
+            }
+            else
+            {
+                Console.WriteLine($"Path not found: {path}");
+            }
         }
     }
 
@@ -49,5 +50,33 @@ public class AddCommand(string repoPath) : ICommand
             fileUtils.CreateFile(indexPath, entry + Environment.NewLine);
         else
             File.AppendAllText(indexPath, entry + Environment.NewLine);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fullPath"></param>
+    /// <param name="relativePath"></param>
+    private void AddFile(string fullPath, string relativePath)
+    {
+        var hash = objectStore.WriteBlob(fullPath);
+
+        StageFile(relativePath, hash);
+
+        Console.WriteLine($"Added {relativePath} ({hash.Substring(0, 7)})");
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fullPath"></param>
+    /// <param name="relativePath"></param>
+    private void AddDirectory(string fullPath, string relativePath)
+    {
+        foreach (var file in Directory.GetFiles(fullPath, "*", SearchOption.AllDirectories))
+        {
+            var relPath = Path.GetRelativePath(repoPath, file);
+            AddFile(file, relPath);
+        }
     }
 }
