@@ -62,3 +62,10 @@ dotnet run -- checkout test
 dotnet run -- checkout master
 dotnet run -- merge test
 ```
+
+## Sources
+
+https://github.com/codecrafters-io/build-your-own-x
+https://wyag.thb.lt/
+https://kushagra.dev/blog/build-git-learn-git/
+https://www.leshenko.net/p/ugit/#
