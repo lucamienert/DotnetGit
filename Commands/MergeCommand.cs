@@ -23,7 +23,7 @@ public class MergeCommand(string repoPath) : ICommand
         }
 
         var targetBranch = args[0];
-        var targetRef = Path.Combine(_refsHeadsPath, targetBranch);
+        var targetRef = Path.Combine(refsHeadsPath, targetBranch);
 
         if (!File.Exists(targetRef))
         {
@@ -31,7 +31,7 @@ public class MergeCommand(string repoPath) : ICommand
             return;
         }
 
-        var headContent = File.ReadAllText(_headPath).Trim();
+        var headContent = File.ReadAllText(headPath).Trim();
 
         if (!headContent.StartsWith("ref: "))
         {
@@ -40,7 +40,7 @@ public class MergeCommand(string repoPath) : ICommand
         }
 
         var currentBranch = headContent.Substring("ref: refs/heads/".Length);
-        var currentRef = Path.Combine(_refsHeadsPath, currentBranch);
+        var currentRef = Path.Combine(refsHeadsPath, currentBranch);
 
         var currentHash = File.Exists(currentRef) ? File.ReadAllText(currentRef).Trim() : "";
         var targetHash = File.ReadAllText(targetRef).Trim();
@@ -78,7 +78,7 @@ public class MergeCommand(string repoPath) : ICommand
             if (hash == ancestorHash)
                 return true;
 
-            var content = _objectStore.ReadBlob(hash);
+            var content = objectStore.ReadBlob(hash);
 
             if (content == null)
                 break;
@@ -100,13 +100,13 @@ public class MergeCommand(string repoPath) : ICommand
     /// <param name="branch"></param>
     private void CheckoutBranch(string branch)
     {
-        var branchRef = Path.Combine(_refsHeadsPath, branch);
+        var branchRef = Path.Combine(refsHeadsPath, branch);
         var commitHash = File.ReadAllText(branchRef).Trim();
 
         if (!string.IsNullOrEmpty(commitHash))
         {
-            var checkout = new CheckoutCommand(_repoPath);
-            
+            var checkout = new CheckoutCommand(repoPath);
+
             checkout.Execute(new string[] { branch });
         }
     }
