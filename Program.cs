@@ -7,7 +7,7 @@ var commands = new Dictionary<string, ICommand>
 
 if (args.Length == 0)
 {
-    Console.WriteLine("Usage: mygit <command> [options]");
+    Console.WriteLine("Usage: dotnetgit <command> [options]");
     return;
 }
 
