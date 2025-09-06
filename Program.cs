@@ -9,9 +9,17 @@ if (args.Length == 0)
 
 var commands = new List<ICommand>
 {
-    new InitCommand(),
-    new AddCommand(FindRepoPath(Environment.CurrentDirectory) ?? ""),
+    new InitCommand()
 };
+
+var repoPath = FindRepoPath(Environment.CurrentDirectory);
+
+if (repoPath != null)
+{
+    commands.Add(new AddCommand(repoPath));
+    commands.Add(new CommitCommand(repoPath));
+    commands.Add(new LogCommand(repoPath));
+}
 
 var cmdName = args[0].ToLower();
 var command = commands.Find(c => c.Name == cmdName);
