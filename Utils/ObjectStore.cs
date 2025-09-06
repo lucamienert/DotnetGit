@@ -37,6 +37,35 @@ public class ObjectStore(string? repoPath)
     }
 
     /// <summary>
+    /// Reading the Blob
+    /// </summary>
+    /// <param name="hash"></param>
+    /// <returns></returns>
+    public string? ReadBlob(string hash)
+    {
+        var dir = Path.Combine(repoPath, ".dotnetgit", "Objects", hash.Substring(0, 2));
+        var file = Path.Combine(dir, hash.Substring(2));
+
+        if (!File.Exists(file))
+            return null;
+
+        return File.ReadAllText(file);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="hash"></param>
+    /// <returns></returns>
+    public byte[] ReadBlobBytes(string hash)
+    {
+        var dir = Path.Combine(repoPath, ".dotnetgit", "Objects", hash.Substring(0, 2));
+        var file = Path.Combine(dir, hash.Substring(2));
+
+        return File.Exists(file) ? File.ReadAllBytes(file) : Array.Empty<byte>();
+    }
+
+    /// <summary>
     /// Hash file Content
     /// </summary>
     /// <param name="content"></param>

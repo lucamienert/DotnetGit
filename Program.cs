@@ -19,6 +19,9 @@ if (repoPath != null)
     commands.Add(new AddCommand(repoPath));
     commands.Add(new CommitCommand(repoPath));
     commands.Add(new LogCommand(repoPath));
+    commands.Add(new StatusCommand(repoPath));
+    commands.Add(new BranchCommand(repoPath));
+    commands.Add(new CheckoutCommand(repoPath));
 }
 
 var cmdName = args[0].ToLower();
