@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "jDRYtmxx6cU=",
+  "success": true,
+  "projectFilePath": "/home/luca/Workspace/DotnetGit/DotnetGit.csproj",
+  "expectedPackageFiles": [
+    "/home/luca/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.8/microsoft.aspnetcore.app.ref.9.0.8.nupkg.sha512"
+  ],
+  "logs": []
+}
