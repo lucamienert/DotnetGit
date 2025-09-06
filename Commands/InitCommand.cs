@@ -1,3 +1,5 @@
+using DotnetGit.Utils;
+
 namespace DotnetGit.Commands;
 
 public class InitCommand : ICommand
